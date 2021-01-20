@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  db:
+    image: mysql:5.7.16
+    restart: always
+    container_name: passport-db
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=isrc123"
+      - "MYSQL_DATABASE=passport"
+    ports:
+      - 3306:3306
+  server:
+    build:
+      context: .
+      dockerfile: ./src/main/docker/Dockerfile.jvm
+    container_name: passport-system
+    ports:
+      - 80:8080
+    environment:
+      DB-URL: "jdbc:postgresql://db:5432/authorization"
